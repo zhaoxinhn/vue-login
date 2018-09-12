@@ -31,7 +31,7 @@ function checkToken(cancel, callback){
                 }, 500)
             } else {
                 getTokenLock = true
-                store.dispatch("auth/getNewToken").then(() => {
+				Auth.getNewToken().then(() => {
                     console.log("已获取新token")
                     callback()
                     getTokenLock = false
@@ -87,10 +87,9 @@ service.interceptors.request.use(
         config.cancelToken = new CancelToken(function executor(c) {
             cancel = c;
         })
-        checkToken(cancel, function(){
-            Auth.setLoginStatus()
-            config.headers.Authorization = `${store.state.user.token}`
-        })
+//         checkToken(cancel, function(){
+//             config.headers.Authorization = `${store.state.user.token}`
+//         })
         stopRepeatRequest(config.url, cancel)
         return config
     },

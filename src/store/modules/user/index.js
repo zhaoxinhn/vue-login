@@ -2,24 +2,40 @@ import Cookies from 'js-cookie'
 
 const state = {
     // 用户名
-    name: ''
+    name: '',
+    navList: []
 }
 
 const mutations = {
     setName: (state, data) => {
-        if(data){
-            Cookies.set('userName', encodeURIComponent(data), {
-                expires: 365
-            })
-        } else {
-            Cookies.remove('userName')
-        }
         state.name = data
+    },
+    setNavList: (state, data) => {
+        state.navList = data
+    }
+}
+
+const actions = {
+    // 获取该用户的菜单列表
+    getNavList({
+        commit
+    }) {
+        return new Promise((resolve) => {
+            axios({
+                url: '/user/navlist',
+                methods: 'post',
+                data: {}
+            }).then((res) => {
+                commit("setNavList", res)
+                resolve(res)
+            })
+        })
     }
 }
 
 export default {
     namespaced: true,
     state,
-    mutations
+    mutations,
+	actions
 }

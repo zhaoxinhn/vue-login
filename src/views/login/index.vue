@@ -39,6 +39,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import setTheme from "@/utils/setTheme"
+import Auth from '@/utils/auth'
 
 export default {
     data() {
@@ -83,13 +84,12 @@ export default {
     },
     methods: {
         ...mapActions({
-            login: 'auth/loginByEmail',
             loadLang: 'loadLang'
         }),
         submitForm(){
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    this.login({
+                    Auth.loginByEmail({
                         name: this.loginForm.name,
                         password: this.loginForm.password
                     }).then(res => {
