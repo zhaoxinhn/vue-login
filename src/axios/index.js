@@ -62,8 +62,8 @@ function checkToken(cancel, callback){
 function stopRepeatRequest(url, c){
     for( let i = 0; i < requestList.length; i++){
         if(requestList[i] == url){
-            c()
-            return
+            c();
+			return;
         }
     }
     requestList.push(url)
@@ -87,10 +87,8 @@ service.interceptors.request.use(
         config.cancelToken = new CancelToken(function executor(c) {
             cancel = c;
         })
-//         checkToken(cancel, function(){
-//             config.headers.Authorization = `${store.state.user.token}`
-//         })
-        stopRepeatRequest(config.url, cancel)
+		config.headers.Authorization = Auth.getToken()
+        stopRepeatRequest(config.baseURL+config.url, cancel)
         return config
     },
     err => {
@@ -107,8 +105,8 @@ service.interceptors.response.use(
                 // 注意，不能保证500ms必定执行，详情请了解JS的异步机制
                 setTimeout(function(){
                     requestList.splice(i,1)
-                }, 500)
-                break
+					}, 500)
+                // break
             }
         }
         return Promise.resolve(response.data)
